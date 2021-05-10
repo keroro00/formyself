@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<!-- Our web's name -->
+		<title>Weather App</title>
+
+		<!-- Must included -->
+		<meta charset="utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+		<!--CSS-->
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+		<link rel="stylesheet" href="css/style.css">
+		<link href="https://code.jquery.com/ui/1.9.2/themes/smoothness/jquery-ui.css" rel="stylesheet">
+		<!--Js-->
+		<script src="js/app.js"></script>
+
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+		<!-- Google map & geocoder API -->
+		<script
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAtlaCz15ImfzCJnn5uPyQzPe3CgyBo2Co&map_ids=69f157b099d4f8cd&language=en"
+			async>
+		</script>
+		<!--chart js-->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+		<!--Sunrise js-->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/moment.js"></script>
+
+	</head>
+
+<body class="main" onload="initialize();sunTime()" >
+
+
+<!-- Title Navbar -->
+<header class="navbar navbar-default navbar-inverse sticky-top">
+		<!--When collapse become a menu-->
+		<button class="navbar-toggler custom-toggler" data-toggle="collapse" type="button" data-target="#mainNav">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<nav class="collapse navbar-collapse" id="mainNav">
+			<ul class="navbar-nav mr-auto">
+
+			<li class="nav-item">
+		      <a class="nav-link text-white topicFont" href="index.html">Main Page</a>
+		    </li>
+
+			<li class="nav-item">
+		      <a class="nav-link text-white topicFont" href="map.html" onclick="document.getElementById('main').innerHTML=window.open('map.html',_parent);">Map</a>
+		    </li>
+				<!-- -->
+			</ul>
+
+		</nav>
+</header>
+<!--the following is the main content of each page-->
+<div class="container-fluid maincontent" id="main">
+
+
+	<!--Today Weather-->
+	<div class = "row justify-content-center">
+
+		<div class = "col">
+			<div class="text-center TodayDetail">
+				<i class="fas fa-map-marker-alt"></i><h5 class="topicFont" id="location"></h5>
+				<img src="" alt="Today weather" id="TodayIcon" width="150" height="150">
+				<h2 class ="topicFont" id="TodayTemp"></h2>
+				<h5 class ="topicFont" id="indexDisplayDayOfToday"></h5>
+				<h5 class ="topicFont" id="indexDisplayTodayDate"></h5>
+				<h5 class ="topicFont" id="indexDisplayTimeOfToday"></h5>
+			</div>
+		</div>
+
+	</div>
+
+	<hr>
+	<!--Weekly Weather-->
+	<div class = "row justify-content-center mt-4">
+
+				<div class="col">
+					<h3 class = "topicFont text-center">Weekly</h3>
+
+					<table>
+						<thead>
+						<tr id="forecastDate"></tr>
+						<tr id="forecastIcon"></tr>
+						<tr id="forecastWeek"></tr>
+						<tr id="forecastMaxTemp"></tr>
+						<tr id="forecastMinTemp"></tr>
+						</thead>
+					</table>
+
+				</div>
+
+		</div>
+
+		<!--Line Chart-->
+	<!--Weekly Weather chart-->
+	<div class = "row justify-content-center mt-3">
+				<div style = "text-align:center;">
+					<canvas id="line-chart"></canvas>
+				</div>
+	</div>
+
+	<hr>
+	<h3 class = "topicFont text-center mt-4">Life</h3>
+
+	<!-- Sunrise / Sunset -->
+	<div class ="row justify-content-center mt-3">
+
+		<div class = "col-6 mr-0">
+		  <div class="card-transparent">
+		    <div class="card-body">
+					<h5 class ="card-title">Sunrise:</h5>
+		      <p class="card-text"><img src="source/sunrise.png" width="50" height="50"></p>
+					<p class="card-text" id="todaySunriseTime"></p>
+		    </div>
+		  </div>
+		</div>
+
+		<div class = "col-6 ml-0">
+		  <div class="card-transparent">
+		    <div class="card-body">
+					<h5 class ="card-title">Sunset:</h5>
+					<p class="card-text"><p><img src="source/sunset.png" width="50" height="50"></p>
+					<p class="card-text" id="todaySunsetTime"></p>
+				</div>
+		  </div>
+		</div>
+
+	</div>
+
+	<!-- Rainfall / UV -->
+	<div class ="row justify-content-center mt-3">
+
+		<div class = "col-6 mr-0">
+			<div class="card-transparent">
+				<div class="card-body">
+					<h5 class ="card-title">Rainfall:</h5>
+					<p class="card-text"><i class="fas fa-cloud-rain fa-2x text-center"></i></p>
+					<p class="card-text" id="rainfall"></p>
+				</div>
+			</div>
+		</div>
+
+		<div class = "col-6 ml-0">
+			<div class="card-transparent">
+				<div class="card-body">
+					<h5 class ="card-title">UV:</h5>
+					<p class="card-text"><i class="far fa-sun fa-2x text-center"></i></p>
+					<p class="card-text" id="uvindex"></p>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<!-- Wind / humidity  -->
+	<div class ="row justify-content-center mt-3">
+
+		<div class = "col-6 mr-0">
+			<div class="card-transparent">
+				<div class="card-body">
+					<h5 class ="card-title">Wind:</h5>
+					<p class="card-text"><i class="fas fa-wind fa-2x text-center"></i></p>
+					<p class="card-text" id="windindex"></p>
+				</div>
+			</div>
+		</div>
+
+		<div class = "col-6 ml-0">
+			<div class="card-transparent">
+				<div class="card-body">
+					<h5 class ="card-title">Humidity:</h5>
+					<p class="card-text"><i class="fas fa-tint fa-2x text-center"></i></p>
+					<p class="card-text" id="humidityindex"></p>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<hr>
+	<h3 class = "topicFont text-center mt-4">Planning</h3>
+	<!-- Sunrise / Sunset selection -->
+
+	<div class = "row justify-content-center mt-4">
+		<div class = "col-12 ml-0">
+			<p>Selectable date:&nbsp <input type="text" class="date text-center" disabled="disabled"></p>
+		</div>
+	</div>
+
+	<div class = "row justify-content-center mt-3 mb-5">
+
+		<div class = "col-6 mr-0">
+			<div class="card-transparent">
+				<div class="card-body">
+						<p class="card-title">Selected Sunrise:</p>
+						<p class="card-text" id="selectSunriseTime"></p>
+				</div>
+			</div>
+		</div>
+
+		<div class = "col-6 ml-0">
+			<div class="card-transparent">
+				<div class="card-body">
+						<p class="card-title">Selected Sunset:&nbsp</p>
+						<p class="card-text" id="selectSunsetTime"></p>
+				</div>
+			</div>
+		</div>
+
+	</div>
+    <script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    <script type="text/javascript">
+        $(".date")
+        .datepicker({
+            dateFormat: "yy-mm-dd",
+            minDate:new Date('2018-1-1'),
+            maxDate:new Date('2022-12-31'),
+            changeMonth: true,
+            changeYear: true,
+            constrainInput: true,
+            showOn: 'button',
+            buttonImage: "source/calendar.gif",
+            onSelect: function(dateText) {
+                console.log("Selected date: " + dateText + "; input's current value: " + this.value);
+                $(this).change();
+                var d = this.value;
+                var momentD = moment(d).format('YYYY-MM-DD');
+                console.log("momentD:" + momentD);
+                // console.log(this.value);
+                const myMomentObject = moment(momentD, 'YYYY-MM-DD')
+                console.log("myMomentObject.format():" + myMomentObject.format());
+                var selectYear = myMomentObject.format("YYYY");
+                console.log(selectYear);
+                var selectMonth = myMomentObject.format("MM");
+                console.log(selectMonth);
+                var selectDay = myMomentObject.format("DD");
+                console.log(selectDay);
+                $.get(`https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=SRS&lang=tc&rformat=json&year=${selectYear}&month=${selectMonth}&day=${selectDay}`,function(srsdata){
+                console.log(srsdata);
+                console.log(srsdata.data[0][1])
+                console.log(srsdata.data[0][3])
+                document.getElementById("selectSunriseTime").innerHTML = srsdata.data[0][1];
+                document.getElementById("selectSunsetTime").innerHTML = srsdata.data[0][3];
+            },'json');
+            }
+        })
+        .on("change", function() {
+            console.log("Got change event from field");
+        });
+    </script>
+    <!-- end of Sunrise / Sunset selection -->
+
+
+</div>
+
+</body>
+</html>
